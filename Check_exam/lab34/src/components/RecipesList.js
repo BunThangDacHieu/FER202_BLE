@@ -52,7 +52,9 @@ export default function RecipesList() {
     }, [search, recipes, sort]);
 
     const handldeClickRecipes =(recipe)=>{
-        if(!selectRecipe.find((sr)=> sr.id === recipe.id)){
+        if(selectRecipe.find((sr)=> sr.id === recipe.id)){
+            alert('This already have a same Recipe')
+        } else {
             setSelectRecipe((prev) => [...prev, recipe]);
         }
     };
@@ -61,18 +63,22 @@ export default function RecipesList() {
     //     setSelectVote((preo) => [...preo, recipe])
     // }
 
-    const SaveRecipes = () =>{
-        axios.post("http://localhost:9999/your_recipes")
-            .then((response)=>{
-                alert("Save Successfully")
-
-            })
-    }
-
     const handleRemoveRecipe = (id) => {
+        window.confirm("Are you sure to remove")
         setSelectRecipe((prev) => prev.filter((recipe) => recipe.id !== id));
+        
     };
     
+    const SaveRecipeClick = (e)=>{
+        e.preventDefault();
+        const NewRecipe = {
+
+        }
+        axios.post("http://localhost:9999/your_recipes", NewRecipe)
+
+
+        alert("")
+    }
 
   return (
     <Container>
@@ -132,8 +138,8 @@ export default function RecipesList() {
                                             users.find(u => u.id == recipe.userId)?
                                             `${users.find(u => u.id == recipe.userId)?.firstName } ${users.find(u => u.id == recipe.userId)?.lastName}`
                                             : '---------'
-                                        }
-                                    </td>
+                                        }   
+                                    </td>   
                                     <td>{recipe.ingredients}</td>
                                     <td>{recipe.rating}</td>
                                     <td>
@@ -203,7 +209,7 @@ export default function RecipesList() {
                                     </tr>
                                 ))}
                             </tbody>
-                            <Button>Save</Button>
+                            <Button onClick={SaveRecipeClick}>Save</Button>
                         </Table>
                         </>
 
